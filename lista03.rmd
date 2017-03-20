@@ -1,0 +1,54 @@
+---
+title: "Lista03"
+author: "Guilherme Pazian"
+date: "19 de março de 2017"
+output: html_document
+---
+
+
+```{r lerArquivos, warning=FALSE}
+data.cps08 <- read.csv("cps08.csv",sep = "")
+View(data.cps08)
+```
+  
+###Os passos neste Chunk foram feitos conforme os passos descritos em ["http://eclr.humanities.manchester.ac.uk/index.php/R_robust_se"](http://eclr.humanities.manchester.ac.uk/index.php/R_robust_se) referentes à "Heteroskedasticity robust standard errors":
+  
+
+```{r warning=FALSE,message=FALSE}
+library(AER)
+
+fit.ahe.age <- lm(ahe~age,data = data.cps08)
+
+robust.fit.ahe.age <- vcovHC(fit.ahe.age, type = "HC1")
+
+coeftest(fit.ahe.age, robust.fit.ahe.age)
+
+```
+  
+```{r VarB1, warning=FALSE}
+Var_Robusta <- function(Beta0 = 1.08228, Beta1 = 0.60499, X = data.cps08$age , Y = data.cps08$ahe) {
+  
+  ui <- Y - Beta0 - Beta1 * X
+  Xbar <- mean(X)
+  n <- length(X)
+  Hi <- 1 - (Xbar / (1/n * sum(X^2))) * X
+  
+  VarBeta1 <- 1/n * ((1/(n-2) * sum((X - Xbar)^2 * ui^2))/(1/n * (sum((X - Xbar)^2)))^2)
+  
+  VarBeta0 <- 1/n * ((1/(n-2) * sum(Hi^2 * ui^2)) / ((1/n*sum(Hi^2))^2))
+  
+  names(VarBeta0) <- "Var(B0)"
+  names(VarBeta1) <- "Var(B1)"
+  return(c(VarBeta0, VarBeta1))
+}
+
+RobustVar <- Var_Robusta()
+
+st.robust.error <- sqrt(RobustVar)
+names(st.robust.error) <- c("SE(B0)","SE(B1)")
+
+```
+
+
+###Note que os Valores para as estimativas dos erros padrão dos estimadores $\beta_0$ e $\beta_1$ em ambos os métodos (pacote "AER" e função "Var_Robusta") são iguais.
+
