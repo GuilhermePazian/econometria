@@ -161,7 +161,11 @@ coeftest(fit.ahe.age, robust.fit.ahe.age)</code></pre>
 RobustVar &lt;- Var_Robusta()
 
 st.robust.error &lt;- sqrt(RobustVar)
-names(st.robust.error) &lt;- c(&quot;SE(B0)&quot;,&quot;SE(B1)&quot;)</code></pre>
+names(st.robust.error) &lt;- c(&quot;SE(B0)&quot;,&quot;SE(B1)&quot;)
+
+st.robust.error</code></pre>
+<pre><code>##     SE(B0)     SE(B1) 
+## 1.16701317 0.04027008</code></pre>
 </div>
 <div id="note-que-os-valores-para-as-estimativas-dos-erros-padrao-dos-estimadores-beta_0-e-beta_1-em-ambos-os-metodos-pacote-aer-e-funcao-var_robusta-sao-iguais." class="section level3">
 <h3>Note que os Valores para as estimativas dos erros padrão dos estimadores <span class="math inline">\(\beta_0\)</span> e <span class="math inline">\(\beta_1\)</span> em ambos os métodos (pacote “AER” e função “Var_Robusta”) são iguais.</h3>
