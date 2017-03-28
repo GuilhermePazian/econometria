@@ -1,0 +1,77 @@
+---
+title: "Lista04"
+author: "Guilherme Pazian"
+date: "28 de marÃ§o de 2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r}
+TeachingRatings <- read.csv("TeachingRatings.csv", dec = ",")
+```
+
+#a) Faça um gráfico de dispersão para Course-Eval e Beauty. Existe relação entre as avaliações e a beleza do professor?
+
+
+```{r}
+library(ggplot2)
+
+ggplot(data = TeachingRatings) +
+  geom_point(aes(beauty, course_eval)) + theme_light()
+```
+  Pode-se observar por meio do gráfico acima que existe correlação linear entre as variáveis, apesar dessa relação não ser muito forte.
+  
+  
+  
+#b) Faça a regressão considerando Course-Eval como variável resposta e Beauty como variável explanatória.O efeito da beleza do professor na avaliação é grande ou pequeno?
+
+```{r, eval=FALSE,echo=FALSE}
+install.packages(
+  'printr',
+  type = 'source',
+  repos = c('http://yihui.name/xran', 'http://cran.rstudio.com')
+)
+```
+
+
+```{r}
+library(printr)
+fit1 <- lm(course_eval~beauty,data = TeachingRatings)
+summary(fit1)$coefficients
+```
+  
+  A estimativa do parâmetro $\beta_1$ apresentada foi: `r round(fit1$coefficients[2],4)`, apesar de não apresentar um valor muito alto, vemos, pela tabela acima, que ele é estatísticamente significativo. Portanto o efeito da beleza do professor é significativo quando comparado com a avaliação.
+  
+# c) Faça a regressão considerando Course-Eval como variável resposta e como variáveis explanatórias Beauty, Intro, OneCredit, Female, Minority e NNEnglish. Qual o efeito da beleza do professor nas avaliações? Compare esse resultado com (b); há viés por omissão de variável?
+
+
+```{r}
+fit2 <- lm(course_eval~beauty + female + minority + nnenglish + intro + onecredit, data = TeachingRatings)
+summary(fit2)$coefficients
+```
+
+  Observe pela tabela acima que o coeficiente estimado para o parâmetro referente à variável "beauty" continua sendo significativo, a estimativa para este mesmo parâmetro agora é `r round(summary(fit2)$coefficients[2],4) `, e teve uma mudança de `r round(summary(fit2)$coefficients[2]-summary(fit1)$coefficients[2],3)`, ou seja, teve uma mudança muito pequena, portanto não ocorreu viés por omissão de variável.
+  
+#d) O professor Smith é negro com Beauty igual à média dessa variável, é falante de inglês nativo e ensina uma disciplina de três créditos. Calcule a previsão da avaliação do professor.
+
+
+Considerando que o curso NÃO é introdutório:
+
+```{r}
+SmithnI <- c(mean(TeachingRatings$beauty),0,1,1,0,0)
+previsaonI <- sum(summary(fit2)$coefficients[1,1] + summary(fit2)$coefficients[-1,1] * SmithnI)
+```
+
+No caso em que consideramos o curso dado por Smith como não introdutório, temos que a previsão de avaliação do professor é dada por : `r round(previsaonI,3)`
+
+
+
+Considerando que o curso é introdutório:
+
+```{r}
+SmithI <- c(mean(TeachingRatings$beauty),0,1,1,1,0)
+previsaoI <- sum(summary(fit2)$coefficients[1,1] + summary(fit2)$coefficients[-1,1] * SmithI)
+```
+
+No caso em que consideramos o curso dado por Smith como introdutório, temos que a previsão de avaliação do professor é dada por : `r round(previsaoI,3)`
