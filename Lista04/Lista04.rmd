@@ -1,7 +1,7 @@
 ---
 title: "Lista04"
 author: "Guilherme Pazian"
-date: "28 de marÃ§o de 2017"
+date: "28 de março de 2017"
 output:
   html_document: default
   pdf_document: default
@@ -39,9 +39,14 @@ install.packages(
 library(printr)
 fit1 <- lm(course_eval~beauty,data = TeachingRatings)
 summary(fit1)$coefficients
+
+r2x <- summary(fit1)$r.squared
+r2ajustx <- summary(fit1)$adj.r.squared
 ```
   
   A estimativa do parâmetro $\beta_1$ apresentada foi: `r round(fit1$coefficients[2],4)`, apesar de não apresentar um valor muito alto, vemos, pela tabela acima, que ele é estatísticamente significativo. Portanto o efeito da beleza do professor é significativo quando comparado com a avaliação.
+  
+  Neste ajuste observamos um valor para $R^2$ de `r round(r2x,3)` e um valor de $\bar{R}^2$ de `r round(r2ajustx,3)`.
   
 # c) Faça a regressão considerando Course-Eval como variável resposta e como variáveis explanatórias Beauty, Intro, OneCredit, Female, Minority e NNEnglish. Qual o efeito da beleza do professor nas avaliações? Compare esse resultado com (b); há viés por omissão de variável?
 
@@ -75,3 +80,16 @@ previsaoI <- sum(summary(fit2)$coefficients[1,1] + summary(fit2)$coefficients[-1
 ```
 
 No caso em que consideramos o curso dado por Smith como introdutório, temos que a previsão de avaliação do professor é dada por : `r round(previsaoI,3)`
+
+
+
+
+#e) Calcule o R2 e $\bar{R}^2$. Discuta os resultados.
+
+```{r}
+r2 <- summary(fit2)$r.squared
+r2ajust <- summary(fit2)$adj.r.squared
+```
+
+
+Neste ajuste observamos um valor para $R^2$ de `r round(r2,3)` e um valor de $\bar{R}^2$ de `r round(r2ajust,3)`. Mesmo que os valores de $R^2$ e $\bar{R}^2$ serem pequenos, observa-se uma melhora significativa comparando-se com estas mesmas métricas com as obtidas no ajuste feito no item b).

@@ -118,7 +118,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Lista04</h1>
 <h4 class="author"><em>Guilherme Pazian</em></h4>
-<h4 class="date"><em>28 de marÃ§o de 2017</em></h4>
+<h4 class="date"><em>28 de março de 2017</em></h4>
 
 </div>
 
@@ -164,7 +164,10 @@ summary(fit1)$coefficients</code></pre>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>r2x &lt;- summary(fit1)$r.squared
+r2ajustx &lt;- summary(fit1)$adj.r.squared</code></pre>
 <p>A estimativa do parâmetro <span class="math inline">\(\beta_1\)</span> apresentada foi: 0.133, apesar de não apresentar um valor muito alto, vemos, pela tabela acima, que ele é estatísticamente significativo. Portanto o efeito da beleza do professor é significativo quando comparado com a avaliação.</p>
+<p>Neste ajuste observamos um valor para <span class="math inline">\(R^2\)</span> de 0.036 e um valor de <span class="math inline">\(\bar{R}^2\)</span> de 0.034.</p>
 </div>
 <div id="c-faca-a-regressao-considerando-course-eval-como-variavel-resposta-e-como-variaveis-explanatorias-beauty-intro-onecredit-female-minority-e-nnenglish.-qual-o-efeito-da-beleza-do-professor-nas-avaliacoes-compare-esse-resultado-com-b-ha-vies-por-omissao-de-variavel" class="section level1">
 <h1>c) Faça a regressão considerando Course-Eval como variável resposta e como variáveis explanatórias Beauty, Intro, OneCredit, Female, Minority e NNEnglish. Qual o efeito da beleza do professor nas avaliações? Compare esse resultado com (b); há viés por omissão de variável?</h1>
@@ -244,6 +247,12 @@ previsaonI &lt;- sum(summary(fit2)$coefficients[1,1] + summary(fit2)$coefficient
 <pre class="r"><code>SmithI &lt;- c(mean(TeachingRatings$beauty),0,1,1,1,0)
 previsaoI &lt;- sum(summary(fit2)$coefficients[1,1] + summary(fit2)$coefficients[-1,1] * SmithI)</code></pre>
 <p>No caso em que consideramos o curso dado por Smith como introdutório, temos que a previsão de avaliação do professor é dada por : 24.01</p>
+</div>
+<div id="e-calcule-o-r2-e-barr2.-discuta-os-resultados." class="section level1">
+<h1>e) Calcule o R2 e <span class="math inline">\(\bar{R}^2\)</span>. Discuta os resultados.</h1>
+<pre class="r"><code>r2 &lt;- summary(fit2)$r.squared
+r2ajust &lt;- summary(fit2)$adj.r.squared</code></pre>
+<p>Neste ajuste observamos um valor para <span class="math inline">\(R^2\)</span> de 0.155 e um valor de <span class="math inline">\(\bar{R}^2\)</span> de 0.144. Mesmo que os valores de <span class="math inline">\(R^2\)</span> e <span class="math inline">\(\bar{R}^2\)</span> serem pequenos, observa-se uma melhora significativa comparando-se com estas mesmas métricas com as obtidas no ajuste feito no item b).</p>
 </div>
 
 
