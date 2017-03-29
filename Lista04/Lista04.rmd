@@ -64,8 +64,8 @@ summary(fit2)$coefficients
 Considerando que o curso NÃO é introdutório:
 
 ```{r}
-SmithnI <- c(mean(TeachingRatings$beauty),0,1,1,0,0)
-previsaonI <- sum(summary(fit2)$coefficients[1,1] + summary(fit2)$coefficients[-1,1] * SmithnI)
+SmithnI <- c(mean(TeachingRatings$beauty),0,1,0,0,0)
+previsaonI <- sum(c(summary(fit2)$coefficients[1,1], summary(fit2)$coefficients[-1,1] * SmithnI))
 ```
 
 No caso em que consideramos o curso dado por Smith como não introdutório, temos que a previsão de avaliação do professor é dada por : `r round(previsaonI,3)`
@@ -75,8 +75,8 @@ No caso em que consideramos o curso dado por Smith como não introdutório, temo
 Considerando que o curso é introdutório:
 
 ```{r}
-SmithI <- c(mean(TeachingRatings$beauty),0,1,1,1,0)
-previsaoI <- sum(summary(fit2)$coefficients[1,1] + summary(fit2)$coefficients[-1,1] * SmithI)
+SmithI <- c(mean(TeachingRatings$beauty),0,1,0,1,0)
+previsaoI <- sum(c(summary(fit2)$coefficients[1,1], summary(fit2)$coefficients[-1,1] * SmithI))
 ```
 
 No caso em que consideramos o curso dado por Smith como introdutório, temos que a previsão de avaliação do professor é dada por : `r round(previsaoI,3)`
@@ -92,4 +92,4 @@ r2ajust <- summary(fit2)$adj.r.squared
 ```
 
 
-Neste ajuste observamos um valor para $R^2$ de `r round(r2,3)` e um valor de $\bar{R}^2$ de `r round(r2ajust,3)`. Mesmo que os valores de $R^2$ e $\bar{R}^2$ serem pequenos, observa-se uma melhora significativa comparando-se com estas mesmas métricas com as obtidas no ajuste feito no item b).
+Neste ajuste observamos um valor para $R^2$ de `r round(r2,3)` e um valor de $\bar{R}^2$ de `r round(r2ajust,3)`. Mesmo que os valores de $R^2$ e $\bar{R}^2$ serem pequenos, observa-se uma melhora significativa comparando-se com estas mesmas métricas com as obtidas no ajuste feito no item b). Porém podemos perceber que uma reta não consegue explicar muito bem o comportamento dos dados.

@@ -240,19 +240,19 @@ summary(fit2)$coefficients</code></pre>
 <div id="d-o-professor-smith-e-negro-com-beauty-igual-a-media-dessa-variavel-e-falante-de-ingles-nativo-e-ensina-uma-disciplina-de-tres-creditos.-calcule-a-previsao-da-avaliacao-do-professor." class="section level1">
 <h1>d) O professor Smith é negro com Beauty igual à média dessa variável, é falante de inglês nativo e ensina uma disciplina de três créditos. Calcule a previsão da avaliação do professor.</h1>
 <p>Considerando que o curso NÃO é introdutório:</p>
-<pre class="r"><code>SmithnI &lt;- c(mean(TeachingRatings$beauty),0,1,1,0,0)
-previsaonI &lt;- sum(summary(fit2)$coefficients[1,1] + summary(fit2)$coefficients[-1,1] * SmithnI)</code></pre>
-<p>No caso em que consideramos o curso dado por Smith como não introdutório, temos que a previsão de avaliação do professor é dada por : 23.999</p>
+<pre class="r"><code>SmithnI &lt;- c(mean(TeachingRatings$beauty),0,1,0,0,0)
+previsaonI &lt;- sum(c(summary(fit2)$coefficients[1,1], summary(fit2)$coefficients[-1,1] * SmithnI))</code></pre>
+<p>No caso em que consideramos o curso dado por Smith como não introdutório, temos que a previsão de avaliação do professor é dada por : 3.902</p>
 <p>Considerando que o curso é introdutório:</p>
-<pre class="r"><code>SmithI &lt;- c(mean(TeachingRatings$beauty),0,1,1,1,0)
-previsaoI &lt;- sum(summary(fit2)$coefficients[1,1] + summary(fit2)$coefficients[-1,1] * SmithI)</code></pre>
-<p>No caso em que consideramos o curso dado por Smith como introdutório, temos que a previsão de avaliação do professor é dada por : 24.01</p>
+<pre class="r"><code>SmithI &lt;- c(mean(TeachingRatings$beauty),0,1,0,1,0)
+previsaoI &lt;- sum(c(summary(fit2)$coefficients[1,1], summary(fit2)$coefficients[-1,1] * SmithI))</code></pre>
+<p>No caso em que consideramos o curso dado por Smith como introdutório, temos que a previsão de avaliação do professor é dada por : 3.913</p>
 </div>
 <div id="e-calcule-o-r2-e-barr2.-discuta-os-resultados." class="section level1">
 <h1>e) Calcule o R2 e <span class="math inline">\(\bar{R}^2\)</span>. Discuta os resultados.</h1>
 <pre class="r"><code>r2 &lt;- summary(fit2)$r.squared
 r2ajust &lt;- summary(fit2)$adj.r.squared</code></pre>
-<p>Neste ajuste observamos um valor para <span class="math inline">\(R^2\)</span> de 0.155 e um valor de <span class="math inline">\(\bar{R}^2\)</span> de 0.144. Mesmo que os valores de <span class="math inline">\(R^2\)</span> e <span class="math inline">\(\bar{R}^2\)</span> serem pequenos, observa-se uma melhora significativa comparando-se com estas mesmas métricas com as obtidas no ajuste feito no item b).</p>
+<p>Neste ajuste observamos um valor para <span class="math inline">\(R^2\)</span> de 0.155 e um valor de <span class="math inline">\(\bar{R}^2\)</span> de 0.144. Mesmo que os valores de <span class="math inline">\(R^2\)</span> e <span class="math inline">\(\bar{R}^2\)</span> serem pequenos, observa-se uma melhora significativa comparando-se com estas mesmas métricas com as obtidas no ajuste feito no item b). Porém podemos perceber que uma reta não consegue explicar muito bem o comportamento dos dados.</p>
 </div>
 
 
