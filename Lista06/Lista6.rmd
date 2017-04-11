@@ -1,0 +1,122 @@
+---
+title: "Guilherme Pazian"
+author: "Lista06"
+date: "11 de abril de 2017"
+output: html_document
+---
+
+```{r, warning=FALSE,message=FALSE}
+TeachingRatings <- read.csv("TeachingRatings.csv", dec = ",")
+```
+
+
+```{r epRobustosMultivar e testeFrobusto}
+ep_robusto_multiplo = function(X, n, k, resid){#em forma matricial
+  #obtendo sigma_hat_beta
+  a = solve((crossprod(X,X))/n)
+  i = 1
+  dim = dim((X[i,]%*%t(X[i,]))*resid[i]^2) #dimensao para a matriz nula
+  # inicializando vetor pra soma
+  soma=matrix(rep(0, dim[1]*dim[2]), nrow=dim[1], ncol=dim[2]) 
+  for(i in 1:n){
+    aux = (X[i,]%*%t(X[i,]))*resid[i]^2
+    soma = aux + soma
+  }
+  sigma_hat_v = (1/(n-k-1))*soma
+  sigma_hat_beta = (1/n)*(a%*%sigma_hat_v%*%a)
+  return(sigma_hat_beta)
+}
+
+#hipoteses H0: R beta = r vs H1: Rbeta ~= r
+F_robusto = function(sigma_hat_beta, R, r, beta_hat){
+  #R = qx(k+1), r = qx1, beta_hat tem que estar como vetor
+  A = (R%*%beta_hat)-r
+  B = R%*%sigma_hat_beta%*%t(R)
+  f = (t(A)%*%solve(B)%*%A)/dim(R)[1]
+  return(f)
+}
+```
+
+
+```{r,warning=FALSE,message=FALSE}
+library(ggplot2)
+library(gridExtra)
+
+BEAUTYxEVAL <- ggplot(data = TeachingRatings) +
+  geom_point(aes(beauty, course_eval)) + theme_light()
+AGExEVAL <- ggplot(data = TeachingRatings) +
+  geom_point(aes(age, course_eval)) + theme_light()
+
+
+grid.arrange(BEAUTYxEVAL,AGExEVAL, ncol = 2)
+```
+
+```{r}
+library(ggplot2)
+library(gridExtra)
+BEAUTYxEVAL2 <- ggplot(data = TeachingRatings) +
+  geom_point(aes(beauty, log(course_eval))) + theme_light()
+AGExEVAL2 <- ggplot(data = TeachingRatings) +
+  geom_point(aes(age, log(course_eval))) + theme_light()
+
+
+grid.arrange(BEAUTYxEVAL2,AGExEVAL2, ncol = 2)
+```
+```{r}
+library(ggplot2)
+library(gridExtra)
+
+ggplot(data = TeachingRatings) +
+  geom_point(aes(log(age), course_eval)) + theme_light()
+```
+```{r}
+library(ggplot2)
+library(gridExtra)
+
+ggplot(data = TeachingRatings) +
+  geom_point(aes(log(age), log(course_eval))) + theme_light()
+```
+
+
+```{r}
+cor(TeachingRatings)
+```
+
+Possíveis interações:
+
+```{r}
+
+
+library(AER)
+fit0 <- lm(course_eval~ minority + age + female + onecredit + beauty +  intro + nnenglish, data = TeachingRatings)
+
+ep_robusto_multiplo(X = as.matrix(TeachingRatings[,-6]), n = ncol(TeachingRatings), k = 8, as.matrix(fit0$residuals))
+
+vcovHC(fit0, type = "HC1")
+
+
+```
+
+
+```{r}
+TeachingRatings$beauty2 <- TeachingRatings$beauty^2
+fit1 <- lm(data = TeachingRatings, course_eval ~ beauty * female + minority * nnenglish + minority:beauty + intro + onecredit + age + beauty2 + beauty:female)
+
+epfit1 <-ep_robusto_multiplo(X, n, k, fit$residuals)
+
+summary(fit)
+summary(fit)$r.squared
+
+
+fit <- lm(data = TeachingRatings, course_eval ~ beauty * female + onecredit)
+
+summary(fit)
+summary(fit)$r.squared
+
+
+fit <- lm(data = TeachingRatings, course_eval ~ beauty * female + beauty2 + beauty2:female + onecredit)
+
+summary(fit)
+summary(fit)$r.squared
+```
+
