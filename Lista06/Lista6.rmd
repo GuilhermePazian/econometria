@@ -5,12 +5,12 @@ date: "11 de abril de 2017"
 output: html_document
 ---
 
-```{r, warning=FALSE,message=FALSE}
+```{r, echo= FALSE, warning=FALSE,message=FALSE}
 TeachingRatings <- read.csv("TeachingRatings.csv", dec = ",")
 ```
 
 
-```{r epRobustosMultivar e testeFrobusto}
+```{r epRobustosMultivar e testeFrobusto,echo=FALSE,warning=FALSE, message=FALSE}
 ep_robusto_multiplo = function(X, n, k, resid){#em forma matricial
   #obtendo sigma_hat_beta
   a = solve((crossprod(X,X))/n)
@@ -38,7 +38,7 @@ F_robusto = function(sigma_hat_beta, R, r, beta_hat){
 ```
 
 
-```{r,warning=FALSE,message=FALSE}
+```{r,warning=FALSE,message=FALSE,echo=FALSE}
 library(ggplot2)
 library(gridExtra)
 
@@ -51,7 +51,7 @@ AGExEVAL <- ggplot(data = TeachingRatings) +
 grid.arrange(BEAUTYxEVAL,AGExEVAL, ncol = 2)
 ```
 
-```{r}
+```{r,echo=FALSE,warning=FALSE, message=FALSE}
 library(ggplot2)
 library(gridExtra)
 BEAUTYxEVAL2 <- ggplot(data = TeachingRatings) +
@@ -62,14 +62,16 @@ AGExEVAL2 <- ggplot(data = TeachingRatings) +
 
 grid.arrange(BEAUTYxEVAL2,AGExEVAL2, ncol = 2)
 ```
-```{r}
+
+```{r,echo=FALSE,warning=FALSE, message=FALSE}
 library(ggplot2)
 library(gridExtra)
 
 ggplot(data = TeachingRatings) +
   geom_point(aes(log(age), course_eval)) + theme_light()
 ```
-```{r}
+
+```{r,echo=FALSE,warning=FALSE, message=FALSE}
 library(ggplot2)
 library(gridExtra)
 
@@ -78,45 +80,108 @@ ggplot(data = TeachingRatings) +
 ```
 
 
-```{r}
-cor(TeachingRatings)
+```{r,echo=FALSE,warning=FALSE, message=FALSE}
+#cor(TeachingRatings)
 ```
 
-Possíveis interações:
+```{r,eval=FALSE,echo=FALSE}
+fit0 <- lm(course_eval~ -1 + minority + age + female + onecredit + beauty +  intro + nnenglish, data = TeachingRatings)
+```
 
-```{r}
 
-
+```{r,eval=FALSE,echo=FALSE,warning=FALSE, message=FALSE}
+#Erro robusto via função vcovHC HC1 para fit0 e "tabela robusta" via função
 library(AER)
-fit0 <- lm(course_eval~ minority + age + female + onecredit + beauty +  intro + nnenglish, data = TeachingRatings)
-
-ep_robusto_multiplo(X = as.matrix(TeachingRatings[,-6]), n = ncol(TeachingRatings), k = 8, as.matrix(fit0$residuals))
-
-vcovHC(fit0, type = "HC1")
-
-
+epfit0robusto <- vcovHC(fit0, type = "HC1")
+epfit0robusto
+diag(epfit0robusto)
+coeftest(fit0, epfit0robusto)
 ```
 
+
+
+```{r, eval=FALSE,echo=FALSE,warning=FALSE, message=FALSE}
+#Erro robusto fit0 calculado programando:
+errorobusto <- ep_robusto_multiplo(X = as.matrix(fit0$model[,-1]), n = length(fit0$residuals), k = ncol(fit0$model[,-1]), as.matrix(fit0$residuals))
+errorobusto
+diag(errorobusto)
+```
+
+
+```{r funcao, echo=FALSE,warning=FALSE, message=FALSE}
+tabelarobusta <- function(fit){
+  ep_robusto_multiplo = function(X, n, k, resid){#em forma matricial
+  #obtendo sigma_hat_beta
+  a = solve((crossprod(X,X))/n)
+  i = 1
+  dim = dim((X[i,]%*%t(X[i,]))*resid[i]^2) #dimensao para a matriz nula
+  # inicializando vetor pra soma
+  soma=matrix(rep(0, dim[1]*dim[2]), nrow=dim[1], ncol=dim[2]) 
+  for(i in 1:n){
+    aux = (X[i,]%*%t(X[i,]))*resid[i]^2
+    soma = aux + soma
+  }
+  sigma_hat_v = (1/(n-k-1))*soma
+  sigma_hat_beta = (1/n)*(a%*%sigma_hat_v%*%a)
+  return(sigma_hat_beta)
+}
+  coef <- summary(fit)$coefficients[,1]
+  var.robusta <- diag(ep_robusto_multiplo(X = as.matrix(model.matrix(fit)), n = length(fit$residuals), k = ncol(model.matrix(fit)), resid = as.matrix(fit$residuals)))
+  eprobusto <- sqrt(var.robusta)
+  t <- coef/eprobusto
+  pt <- round(2*(1-pt(abs(t),fit$df.residual)),6)
+  tabela <- data.frame(coef,eprobusto,t,pt)
+  return(tabela)
+}
+```
+
+
+```{r,eval=FALSE,echo=FALSE}
+tabelarobusta(fit0)
+
+summary(fit0)$r.squared
+summary(fit0)$adj.r.squared
+```
 
 ```{r}
 TeachingRatings$beauty2 <- TeachingRatings$beauty^2
-fit1 <- lm(data = TeachingRatings, course_eval ~ beauty * female + minority * nnenglish + minority:beauty + intro + onecredit + age + beauty2 + beauty:female)
+fit1 <- lm(data = TeachingRatings, course_eval ~ -1 + beauty * female + minority * nnenglish + minority:beauty + intro + onecredit + age + beauty2)
+```
+```{r}
+tabelarobusta(fit1)
 
-epfit1 <-ep_robusto_multiplo(X, n, k, fit$residuals)
-
-summary(fit)
-summary(fit)$r.squared
-
-
-fit <- lm(data = TeachingRatings, course_eval ~ beauty * female + onecredit)
-
-summary(fit)
-summary(fit)$r.squared
-
-
-fit <- lm(data = TeachingRatings, course_eval ~ beauty * female + beauty2 + beauty2:female + onecredit)
-
-summary(fit)
-summary(fit)$r.squared
+summary(fit1)$r.squared
+summary(fit1)$adj.r.squared
 ```
 
+
+Dados os resutados acima, vamos ajustar outro modelo, agora sem as variáveis  **nnenglish**, interação **minority:nnenglish** e **beauty2**. Não excluiu-se inicialmente a variável **minority** pois apesar de seu efeito principal ser estatísticamente não significativo, a interação **beauty:minority** o foi. 
+
+```{r}
+fit2 <- lm(data = TeachingRatings, course_eval ~ -1 + beauty * female + minority + intro + onecredit + age + beauty:minority)
+```
+
+```{r}
+tabelarobusta(fit2)
+
+summary(fit2)$r.squared
+summary(fit2)$adj.r.squared
+```
+
+Agora vamos ajustar um modelo sem a variável **minority** e a interação **beauty:minority** para observar se ocorrem mudanças nas estimativas:
+```{r}
+fit3 <- lm(data = TeachingRatings, course_eval ~ -1 + beauty * female + intro + onecredit + age)
+```
+
+
+```{r}
+tabelarobusta(fit3)
+
+summary(fit3)$r.squared
+summary(fit3)$adj.r.squared
+```
+
+
+#Conclusão:
+
+Embora os três modelos apresentados tenham medidas de $R^2$ e $\bar{R^2}$ bem similares, acho que o melhor modelo a se apresentar é o modelo com as variáveis **beauty**,**female**,**intro**,**onecredit** **age** e a interação **beauty:female** uma vez que é o modelo mais simples entre os três apresentados, o que facilita a interpretação sem perder muito poder preditivo uma vez que as medidas $R^2$ e $\bar{R^2}$ dos modelos apresentados diferem somente na 3ªcasa decimal.
