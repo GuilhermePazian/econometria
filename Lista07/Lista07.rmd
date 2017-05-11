@@ -1,0 +1,22 @@
+---
+title: "Lista07"
+author: "Guilherme Pazian"
+date: "7 de maio de 2017"
+output:
+  html_document: default
+---
+
+Modelo 1: MQO, usando as observações 1-500
+Variável dependente: EARNINGS
+Erros padrão robustos à heteroscedasticidade, variante HC1
+
+             coeficiente   erro padrão   razão-t    p-valor 
+  ----------------------------------------------------------
+  S            1,31546      0,0351172     37,46    4,18e-147 ***
+
+Média var. dependente   19,58076   D.P. var. dependente    11,87181
+Soma resíd. quadrados   64324,53   E.P. da regressão       11,35372
+R-quadrado              0,754517   R-quadrado ajustado     0,754517
+F(1, 499)               1403,188   P-valor(F)              4,2e-147
+Log da verossimilhança −1923,741   Critério de Akaike      3849,483
+Critério de Schwarz     3853,697   Critério Hannan-Quinn   3851,136
