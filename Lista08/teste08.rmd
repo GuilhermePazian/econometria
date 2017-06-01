@@ -1,35 +1,43 @@
 ---
 title: "Teste08"
 author: "Guilherme Pazian"
-date: "31 de maio de 2017"
+header-includes:
+  - \usepackage{graphicx}
 output: pdf_document
 ---
 
-modelo
+wage - Ganho médio por hora da esposa em dólares em 1975.  
+educ - Formação educacional da esposa, em anos.  
+exper - Anos de experiência anterior no mercado de trabalho da esposa.  
+hours - Horas trabalhadas pela esposa em 1975.  
+kidsl6 - Número de crianças com menos de 6 anos no domicílio.
+largecity - Variável Dummy (1 se mora em cidade grande, 0 caso contrário)  
+siblings - Número de irmãos da esposa.  
+fathereduc - Nível de educação do pai da esposa.  
+mothereduc - Nível de educação da mãe da esposa.  
 
-wage - Ganho médio por hora da esposa em dólares em 1975.
-educ - Formação educacional da esposa, em anos.
-siblings - Número de irmãos da esposa.
+Os instrumentos estão em letra padrão;  
+A variável de interesse está em negrito;  
+As variáveis regressoras que tabém são instrumentos estão em italico.  
 
-
-wage(salario) ~ educ(mulher) + siblings (irmãos) "instrumento"
+wage(salario) ~ **educ(mulher)** + *exper* + *hours* + *kidsl6* + *largecity* + siblings + fathereduc + mothereduc  
 
 \begin{center}
 
-Modelo 9: MQ2E, usando as observaÃ§Ãµes 1--428\\
-VariÃ¡vel dependente: l\_wage\\
+Modelo 9: MQ2E, usando as observações 1--428\\
+Variável dependente: l\_wage\\
 Instrumentado: educ \\
 Instrumentos: const siblings fathereduc mothereduc exper hours kidsl6 \\
 largecity \\
-Erros padrÃ£o robustos Ã  heteroscedasticidade, variante HC1
+Erros padrão robustos à heteroscedasticidade, variante HC1
 
 \vspace{1em}
 
 \begin{tabular}{lr@{,}lr@{,}lr@{,}lr@{,}l}
   &
  \multicolumn{2}{c}{Coeficiente} &
-  \multicolumn{2}{c}{Erro\ PadrÃ£o} &
-   \multicolumn{2}{c}{razÃ£o-$t$} &
+  \multicolumn{2}{c}{Erro\ Padrão} &
+   \multicolumn{2}{c}{razão-$t$} &
     \multicolumn{2}{c}{p-valor} \\[1ex]
 const &
   0&255083 &
@@ -65,8 +73,8 @@ largecity &
 
 \vspace{1ex}
 \begin{tabular}{lrlr}
-MÃ©dia var. dependente &  1,190173 & D.P. var. dependente &  0,723198 \\
-Soma resÃ?d. quadrados &  194,3264 & E.P. da regressÃ£o &  0,678594 \\
+Média var. dependente &  1,190173 & D.P. var. dependente &  0,723198 \\
+Soma resíd. quadrados &  194,3264 & E.P. da regressão &  0,678594 \\
 $R^2$ &  0,140161 & $R^2$ ajustado &  0,129973 \\
 $F(5, 422)$ &  4,557122 & P-valor($F$) &  0,000465 \\
 \end{tabular}
@@ -74,12 +82,12 @@ $F(5, 422)$ &  4,557122 & P-valor($F$) &  0,000465 \\
 \vspace{1em}
 \begin{raggedright}
 Teste de Hausman --\\
-\quad HipÃ³tese nula: as estimativas por MQO são consistentes\\
+\quad Hipótese nula: as estimativas por MQO são consistentes\\
 \quad Estatística de teste assintótica: $\chi^2(1)$ = 3,02292\\
 \quad com p-valor = 0,0820958\\
 \vspace{1ex}
-Teste de Sargan para a sobre-identificaÃ§Ã£o --\\
-\quad HipÃ³tese nula: todos os instrumentos são válidos\\
+Teste de Sargan para a sobre-identificação --\\
+\quad Hipótese nula: todos os instrumentos são válidos\\
 \quad Estatística de teste: LM = 0,584092\\
 \quad com p-valor = $P$($\chi^2(2) >$ 0,584092) = 0,746734\\
 \vspace{1ex}
@@ -89,24 +97,40 @@ Teste de instrumento fraco -- \\
 
 \end{center}
 
+Ajustar um novo modelo sem as variáveis não significativas no modelo.
 
 \newpage
 
+
+
+wage - Ganho médio por hora da esposa em dólares em 1975.  
+educ - Formação educacional da esposa, em anos.  
+exper - Anos de experiência anterior no mercado de trabalho da esposa.  
+siblings - Número de irmãos da esposa.  
+fathereduc - Nível de educação do pai da esposa.  
+mothereduc - Nível de educação da mãe da esposa.  
+
+Os instrumentos estão em letra padrão;  
+A variável de interesse está em negrito;  
+As variáveis regressoras que tabém são instrumentos estão em italico.  
+
+wage(salario) ~ **educ(mulher)** + *exper* + siblings + fathereduc + mothereduc  
+
 \begin{center}
 
-Modelo 10: MQ2E, usando as observaÃ§Ãµes 1--428\\
-VariÃ¡vel dependente: l\_wage\\
+Modelo 10: MQ2E, usando as observações 1--428\\
+Variável dependente: l\_wage\\
 Instrumentado: educ \\
 Instrumentos: const siblings fathereduc mothereduc exper \\
-Erros padrÃ£o robustos Ã  heteroscedasticidade, variante HC1
+Erros padrão robustos à heteroscedasticidade, variante HC1
 
 \vspace{1em}
 
 \begin{tabular}{lr@{,}lr@{,}lr@{,}lr@{,}l}
   &
  \multicolumn{2}{c}{Coeficiente} &
-  \multicolumn{2}{c}{Erro\ PadrÃ£o} &
-   \multicolumn{2}{c}{razÃ£o-$t$} &
+  \multicolumn{2}{c}{Erro\ Padrão} &
+   \multicolumn{2}{c}{razão-$t$} &
     \multicolumn{2}{c}{p-valor} \\[1ex]
 const &
   0&171469 &
@@ -127,8 +151,8 @@ exper &
 
 \vspace{1ex}
 \begin{tabular}{lrlr}
-MÃ©dia var. dependente &  1,190173 & D.P. var. dependente &  0,723198 \\
-Soma resÃ?d. quadrados &  194,7016 & E.P. da regressÃ£o &  0,676847 \\
+Média var. dependente &  1,190173 & D.P. var. dependente &  0,723198 \\
+Soma resíd. quadrados &  194,7016 & E.P. da regressão &  0,676847 \\
 $R^2$ &  0,140122 & $R^2$ ajustado &  0,136075 \\
 $F(2, 425)$ &  8,586489 & P-valor($F$) &  0,000221 \\
 \end{tabular}
@@ -136,12 +160,12 @@ $F(2, 425)$ &  8,586489 & P-valor($F$) &  0,000221 \\
 \vspace{1em}
 \begin{raggedright}
 Teste de Hausman --\\
-\quad HipÃ³tese nula: as estimativas por MQO são consistentes\\
+\quad Hipótese nula: as estimativas por MQO são consistentes\\
 \quad Estatística de teste assintótica: $\chi^2(1)$ = 2,74038\\
 \quad com p-valor = 0,0978414\\
 \vspace{1ex}
-Teste de Sargan para a sobre-identificaÃ§Ã£o --\\
-\quad HipÃ³tese nula: todos os instrumentos são válidos\\
+Teste de Sargan para a sobre-identificação --\\
+\quad Hipótese nula: todos os instrumentos são válidos\\
 \quad Estatística de teste: LM = 0,828443\\
 \quad com p-valor = $P$($\chi^2(2) >$ 0,828443) = 0,660854\\
 \vspace{1ex}
@@ -151,5 +175,58 @@ Teste de instrumento fraco -- \\
 
 \end{center}
 
+Note que não rejeitamos a hipótese de nula, e o teste de instrumento fraco indicou 33,8202 que é maior que 10 (<10 indica instrumentos fracos)
 
 
+![Gráfico de dispersão log(wage) x educ](lwageXeduc.png)
+
+![Estatísticas Descritivas de todas as variáveis](summarydados.png)
+
+\newpage
+
+MODELO SEM INSTRUMENTOS:
+
+
+\begin{center}
+
+Modelo 1: MQO, usando as observações 1--428\\
+Variável dependente: l\_wage\\
+Erros padrão robustos à heteroscedasticidade, variante HC1
+
+\vspace{1em}
+
+\begin{tabular}{lr@{,}lr@{,}lr@{,}lr@{,}l}
+  &
+ \multicolumn{2}{c}{Coeficiente} &
+  \multicolumn{2}{c}{Erro\ Padrão} &
+   \multicolumn{2}{c}{razão-$t$} &
+    \multicolumn{2}{c}{p-valor} \\[1ex]
+const &
+  $-$0&400174 &
+    0&182819 &
+      $-$2&189 &
+        0&0291 \\
+exper &
+  0&0156736 &
+    0&00408097 &
+      3&841 &
+        0&0001 \\
+educ &
+  0&109489 &
+    0&0133353 &
+      8&210 &
+        0&0000 \\
+\end{tabular}
+
+\vspace{1ex}
+\begin{tabular}{lrlr}
+Média var. dependente &  1,190173 & D.P. var. dependente &  0,723198 \\
+Soma resíd. quadrados &  190,1950 & E.P. da regressão &  0,668968 \\
+$R^2$ &  0,148358 & $R^2$ ajustado &  0,144350 \\
+$F(2, 425)$ &  40,12862 & P-valor($F$) &  1,09\textrm{e--16} \\
+Log da verossimilhança & $-$433,7360 & Critério de Akaike &  873,4720 \\
+Critério de Schwarz &  885,6493 & Hannan--Quinn &  878,2813 \\
+\end{tabular}
+
+
+\end{center}
