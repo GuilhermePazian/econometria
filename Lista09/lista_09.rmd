@@ -1,0 +1,154 @@
+---
+title: "Teste09"
+author: "Guilherme Pazian"
+date: "13 de junho de 2017"
+output: pdf_document
+---
+
+
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+dados <- read.csv("Names.csv")
+```
+
+##Questão A
+
+Defina a taxa de retorno de chamada como a proporção de CV's que geraram uma chamada telefonica do futuro empregador. Quais foram as taxas de retorno de chamada para os brancos e afroamericanos? Calcule um intervalo de confiança de 95% para a diferença das taxas de retorno. Essa diferença é estatísticamente significativa? A diferença é grande na prática?
+
+```{r}
+#taxa de retorno para brancos
+brancos=filter(dados, black==0)
+retornobrancos=sum(brancos$call_back)
+num_brancos=nrow(brancos)
+taxa_b=retornobrancos/num_brancos
+
+#taxa de retorno para afroamericanos
+negros=filter(dados, black==1)
+retornonegros=sum(negros$call_back)
+num_negros=nrow(negros)
+taxa_n=retornonegros/num_negros
+
+```
+
+As taxas de retorno foram:
+
+- Brancos: `r taxa_b`
+- Afroamericanos: `r taxa_n`
+
+IC:  
+
+Seja $Y_b$ : número de retornos para brancos $Y_b \sim Binomial(n_b,p_b)$
+Pelo teorema central do limite: 
+$Y_b \sim N(p_b,n_bp_b(1-p_b))$  onde $n_b$ = `r num_brancos`
+
+Pela propiedade de distribuição assintótica do estimador de maxima verossimilhança, temos:
+$\hat{p_b} \sim N(p_b,I(p))$ onde $I(p_b)^-1 = \frac{n_b}{p_ba(1-p_b)}$ é a informação de fisher.
+
+
+Seja $Y_a$ : número de retornos para afroamericanos $Y_a \sim Binomial(n_a,p_a)$
+
+$Y_a \sim N(p_a,n_ap_a(1-p_a))$  onde $n_a$ = `r num_negros`
+
+Pela propiedade de distribuição assintótica do estimador de maxima verossimilhança, temos:
+$\hat{p_a} \sim N(p_a,I(a))$ onde $I(p_a)^-1 = \frac{n_a}{p_a(1-p_a)}$ é a informação de fisher.
+
+Por hipótese as distribuições são independentes.
+
+Então $$(p_b - p_a) \sim N(p_b - p_a, var(p_b) + var(p_a)) \\
+\Rightarrow (p_b - p_a) \sim N(p_b - p_a, \frac{n_b}{p_b(1-p_b)} + \frac{n_a}{p_a(1-p_a)})$$ 
+
+Um Ic($(p_b - p_a)$,95%) = $(\hat{p_b} - \hat{p_a} - 1.96 \frac{n_b}{\hat{p_b}(1-\hat{p_b})}) ; \hat{p_b} - \hat{p_a} + 1.96 \frac{n_b}{\hat{p_b}(1-\hat{p_b})}))$
+
+
+```{r}
+
+Var_dif <- 1/(num_brancos/(taxa_b*(1-taxa_b)) + num_negros/(taxa_n*(1-taxa_n)))
+LI_IC_A <- (taxa_b - taxa_n) - qnorm(.975) * sqrt(Var_dif)
+LS_IC_A <- (taxa_b - taxa_n) - qnorm(.975) * sqrt(Var_dif)
+
+```
+
+Um Ic($(p_b - p_a)$,95%) = [ `r round(LI_IC_A,4)` ; `r round(LS_IC_A,4)`]
+
+##Questão 2
+Considere os brancos; é diferente a taxa de retorno para homens e mulheres? E para os afroamericanos?
+
+```{r}
+#brancos
+homens_b=filter(brancos, female==0)
+mulheres_b=filter(brancos, female==1)
+retornobrancos_H=sum(homens_b$call_back==1)
+retornobrancos_M=sum(mulheres_b$call_back==1)
+num_brancos_H=nrow(homens_b)
+num_brancos_M=nrow(mulheres_b)
+
+taxa_b_H=retornobrancos_H/num_brancos_H
+taxa_b_M=retornobrancos_M/num_brancos_M
+
+#afroamericanos
+homens_n=filter(negros, female==0)
+mulheres_n=filter(negros, female==1)
+
+retornonegros_H=sum(homens_n$call_back==1)
+retornonegros_M=sum(mulheres_n$call_back==1)
+num_negros_H=nrow(homens_n)
+num_negros_M=nrow(mulheres_n)
+
+taxa_n_H=retornonegros_H/num_negros_H
+taxa_n_M=retornonegros_M/num_negros_M
+
+```
+
+As taxas de retorno para brancos:
+
+- Homens: `r taxa_b_H`
+- Mulheres: `r taxa_b_M`
+
+As taxas de retorno para negros foram:
+
+- Homens: `r taxa_n_H`
+- Mulheres: `r taxa_n_M`
+
+Podemos testar as hipóteses de que $H_0: p_{bh} - p_{bm} = 0\ \ Vs\ H_1 p_{bh} - p_{bm} \neq 0$
+
+$H_0: p_{ah} - p_{am} = 0\ \ Vs\ H_1 p_{ah} - p_{am} \neq 0$ com um teste de hipóteses normal. (como anteriormente para o teste de hipóteses)
+
+```{r}
+var_dif_HM_brancos <- 1/(num_brancos_M/(taxa_b_M*(1-taxa_b_M)) + num_brancos_H/(taxa_b_H*(1-taxa_b_H)))
+teste_HM_brancos <- (retornobrancos_H - retornobrancos_M)/sqrt(var_dif_HM_brancos)
+p_valor_HM_brancos <- pnorm(teste_HM_brancos)
+```
+`r p_valor_HM_brancos`  é o p-valor para o teste HM_brancos
+
+
+```{r}
+var_dif_HM_negros <- 1/(num_negros_M/(taxa_n_M*(1-taxa_n_M)) + num_negros_H/(taxa_n_H*(1-taxa_n_H)))
+teste_HM_negros <- (retornonegros_H - retornonegros_M)/sqrt(var_dif_HM_negros)
+p_valor_HM_negros <- pnorm(teste_HM_negros)
+```
+
+`r p_valor_HM_negros`  é o p-valor para o teste HM_negros
+
+##Questão 3
+Qual a diferença na taxa de retorno nos CV's de qualificação elevada comparados com os CV's de qualificação baixa? Qual a diferença entre os CV's de alta qualificação e os de baixa qualificação para os brancos? e para os afroamericanos? Essas diferenças são estatísticamente significativas e são importantes na prática?
+
+```{r}
+
+retorno=sum(dados$call_back)
+num_cvs=nrow(dados)
+
+```
+
+
+##Questão 4
+Os autores do estudo afirmam que a etnia foi asignada aleatóriamente a cada CV. Há evidência de asignaçao não aleatória?
+
+```{r}
+ajuste=lm(data = dados, black~female+high+chicago+ofjobs+yearsexp+honors+volunteer+military+empholes+workinschool+email+computerskills+specialskills+college+expminreq+eoe+manager+supervisor+secretary+offsupport+salesrep+retailsales+req+expreq+comreq++educreq+compreq+orgreq+manuf+transcom+bankreal+trade+busservice+othservice+missind)
+summary(ajuste)
+```
+
