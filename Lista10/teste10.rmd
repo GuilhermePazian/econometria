@@ -1,0 +1,60 @@
+---
+title: "Lista10"
+author: "Guilherme Pazian"
+date: "19 de junho de 2017"
+output: pdf_document
+---
+
+
+[http://fmwww.bc.edu/ec-p/data/stockwatson/datasets.list.html](http://fmwww.bc.edu/ec-p/data/stockwatson/datasets.list.html)
+
+
+```{r}
+library(foreign)
+library(AER)
+dados <- read.dta("fatality.dta")
+dados$mrall <- dados$mrall * 10000
+dados$mlda <- round(dados$mlda,0)
+```
+
+
+```{r}
+fit_1 <- lm(mrall~beertax,data= dados)
+#summary(fit_1)
+epfit_1robusto <- vcovHC(fit_1, type = "HC1")
+#epfit_1robusto
+#diag(epfit_1robusto)
+coef_fit_1 <- coeftest(fit_1, epfit_1robusto)
+coef_fit_1[1:2,]
+```
+
+```{r}
+fit_2 <- lm(mrall ~ beertax + as.factor(state),data = dados)
+#summary(fit_2)
+epfit_2robusto <- vcovHC(fit_2, type = "HC1")
+#epfit_2robusto
+#diag(epfit_2robusto)
+coef_fit_2 <- coeftest(fit_2, epfit_2robusto)
+coef_fit_2[1:2,]
+```
+
+```{r}
+fit_3 <- lm(mrall ~ beertax + as.factor(state) + as.factor(year),data = dados)
+#summary(fit_3)
+epfit_3robusto <- vcovHC(fit_3, type = "HC1")
+#epfit_3robusto
+#diag(epfit_3robusto)
+coef_fit_3 <- coeftest(fit_3, epfit_3robusto)
+coef_fit_3[1:2,]
+```
+
+```{r}
+ordered(mlda)
+fit_4 <- lm(mrall ~ beertax + as.factor(mlda) + jaild + comserd + vmiles + unrate + log(perinc) + as.factor(state) + as.factor(year),data = dados)
+#summary(fit_4)
+epfit_4robusto <- vcovHC(fit_4, type = "HC1")
+#epfit_4robusto
+#diag(epfit_4robusto)
+coef_fit_4 <- coeftest(fit_4, epfit_4robusto)
+coef_fit_4[1:10,]
+```

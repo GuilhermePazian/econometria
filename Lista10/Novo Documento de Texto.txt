@@ -1,0 +1,73 @@
+Contains data from http://fmwww.bc.edu/ec-p/data/stockwatson/fatality.dta
+  obs:           336                          
+ vars:            43                          30 Jul 2002 10:00
+ size:        48,048 (99.9% of memory free)
+-------------------------------------------------------------------------------
+              storage  display     value
+variable name   type   format      label      variable label
+-------------------------------------------------------------------------------
+state           byte   %9.0g       sid        State ID (FIPS) Code
+year            int    %9.0g                  Year
+spircons        float  %9.0g                  Spirits Consumption
+unrate          float  %9.0g                  Unemployment Rate
+perinc          float  %9.0g                  Per Capita Personal Income
+emppop          float  %9.0g                  Employment/Population Ratio
+beertax         float  %9.0g                  Tax on Case of Beer
+sobapt          float  %9.0g                  % Southern Baptist
+mormon          float  %9.0g                  % Mormon
+mlda            float  %9.0g                  Minimum Legal Drinking Age
+dry             float  %9.0g                  % Residing in Dry Counties
+yngdrv          float  %9.0g                  % of Drivers Aged 15-24
+vmiles          float  %9.0g                  Ave. Mile per Driver
+breath          byte   %9.0g                  Prelim. Breath Test Law
+jaild           byte   %9.0g                  Mandatory Jail Sentence
+comserd         byte   %9.0g                  Mandatory Community Service
+allmort         int    %9.0g                  # of Vehicle Fatalities (#VF)
+mrall           float  %9.0g                  Vehicle Fatality Rate (VFR)
+allnite         int    %9.0g                  # of Night-time VF (#NVF)
+mralln          float  %9.0g                  Night-time VFR (NFVR)
+allsvn          int    %9.0g                  # of Single VF (#SVN)
+a1517           int    %9.0g                  #VF, 15-17 year olds
+mra1517         float  %9.0g                  VFR, 15-17 year olds
+a1517n          byte   %9.0g                  #NVF, 15-17 year olds
+mra1517n        float  %9.0g                  NVFR, 15-17 year olds
+a1820           int    %9.0g                  #VF, 18-20 year olds
+a1820n          int    %9.0g                  #NVF, 18-20 year olds
+mra1820         float  %9.0g                  VFR, 18-20 year olds
+mra1820n        float  %9.0g                  NVFR, 18-20 year olds
+a2124           int    %9.0g                  #VF, 21-24 year olds
+mra2124         float  %9.0g                  VFR, 21-24 year olds
+a2124n          int    %9.0g                  #NVF, 21-24 year olds
+mra2124n        float  %9.0g                  NVFR, 21-24 year olds
+aidall          float  %9.0g                  # of alcohol-involved VF
+mraidall        float  %9.0g                  Alcohol-Involved VFR
+pop             float  %9.0g                  Population
+pop1517         float  %9.0g                  Population, 15-17 year olds
+pop1820         float  %9.0g                  Population, 18-20 year olds
+pop2124         float  %9.0g                  Population, 21-24 year olds
+miles           float  %9.0g                  total vehicle miles (millions
+unus            float  %9.0g                  U.S. unemployment rate
+epopus          float  %9.0g                  U.S. Emp/Pop Ratio
+gspch           float  %9.0g                  GSP Rate of Change
+-------------------------------------------------------------------------
+THE STATE TRAFFIC FATALITY DATA SET
+The data are for the “lower 48” U.S. states (excluding Alaska and Hawaii), 
+annually for 1982 through 1988.  The traffic fatality rate is the number of 
+traffic deaths in a given state in a given year, per 10,000 people living in 
+that state in that year. Traffic fatality data were obtained from the U.S. 
+Department of Transportation Fatal Accident Reporting System.  
+The beer tax is the tax on a case of beer, which is an available measure of 
+state alcohol taxes more generally.  The drinking age variables in Table 8.1 
+are binary variables indicating whether the legal drinking age is 18, 19, or 20.  
+The two binary punishment variables in Table 8.1 describe the state’s minimum 
+sentencing requirements for an initial drunk driving conviction:  “Mandatory jail?” 
+equals one if the state requires jail time and equals zero otherwise, and 
+“Mandatory community service?” equals one if the state requires community 
+service and equals zero otherwise.  Total vehicle miles traveled annually 
+by state was obtained from the Department of Transportation.  Personal income 
+was obtained from the U.S. Bureau of Economic Analysis, and the unemployment 
+rate was obtained from the U.S. Bureau of Labor Statistics.
+These data were graciously provided to us by Professor Christopher J. Ruhm of 
+the Department of Economics at the University of North Carolina.
+
+
