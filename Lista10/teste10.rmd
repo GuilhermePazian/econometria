@@ -6,6 +6,32 @@ output: pdf_document
 ---
 
 
+1. Exercícios 8.1, 8.2, 8.3 e 10.1 de Stock-Watson.
+8.1
+a)
+```{r}
+popNJ <- 8100000
+coef_beertax <- -0.45
+ep_coef_beertax <- 0.22
+mortes <- 1*(-0.45)*popNJ/10000
+ep_mortes <- ep_coef_beertax*popNJ/10000
+LIIC_mortes <- mortes - qnorm(.975)*ep_mortes
+
+LSIC_mortes <- mortes + qnorm(.975)*ep_mortes
+LIIC_mortes
+LSIC_mortes
+```
+
+
+
+```{r}
+
+```
+
+
+2. Implementar um programa em R para reproduzir os resultados da Tabela 8.1 de Stock-Watson
+
+
 [http://fmwww.bc.edu/ec-p/data/stockwatson/datasets.list.html](http://fmwww.bc.edu/ec-p/data/stockwatson/datasets.list.html)
 
 
