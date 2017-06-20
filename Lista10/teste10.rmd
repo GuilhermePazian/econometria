@@ -8,25 +8,59 @@ output: pdf_document
 
 1. Exercícios 8.1, 8.2, 8.3 e 10.1 de Stock-Watson.
 8.1
-a)
+a)  
 ```{r}
 popNJ <- 8100000
 coef_beertax <- -0.45
 ep_coef_beertax <- 0.22
-mortes <- 1*(-0.45)*popNJ/10000
-ep_mortes <- ep_coef_beertax*popNJ/10000
-LIIC_mortes <- mortes - qnorm(.975)*ep_mortes
+mortes1 <- 1*(-0.45)*popNJ/10000
+ep_mortes1 <- ep_coef_beertax*popNJ/10000
 
-LSIC_mortes <- mortes + qnorm(.975)*ep_mortes
-LIIC_mortes
-LSIC_mortes
+LIIC_mortes1 <- mortes1 - qnorm(.975)*ep_mortes1
+
+LSIC_mortes1 <- mortes1 + qnorm(.975)*ep_mortes1
+LIIC_mortes1
+LSIC_mortes1
 ```
-
+b)  
 
 
 ```{r}
+coef_idade18 <- 0.028
+ep_coef_idade18 <- 0.066
+mortes2 <- coef_idade18 * popNJ/10000
+ep_mortes2 <- ep_coef_idade18 * popNJ/10000
 
+LIIC_mortes2 <- mortes2 - qnorm(.975)*ep_mortes2
+
+LSIC_mortes2 <- mortes2 + qnorm(.975)*ep_mortes2
+LIIC_mortes2
+LSIC_mortes2
 ```
+
+c)  
+
+```{r}
+coef_lnRenda <- 1.81
+ep_coef_lnRenda <- 0.47
+mortes3 <- 0.01 * coef_lnRenda * popNJ/10000
+ep_mortes3 <- ep_coef_lnRenda * popNJ/10000
+
+LIIC_mortes3 <- mortes3 - qnorm(.95)*ep_mortes3
+
+LSIC_mortes3 <- mortes3 + qnorm(.95)*ep_mortes3
+LIIC_mortes3
+LSIC_mortes3
+```
+
+d)
+Sim, os efeitos temporais removem efeitos de variáveis não observáveis que são constantes em relação à estados mas mudam conforme o tempo, por isso, eliminamos possível vies de omissão de variáveis constantes nos estados (mas variam no tempo). O próprio modelo feito sem a inserção de efeitos temporais apresenta um coeficiente de determinação ($R^2$) e coeficiente de determinação ajustado ($\bar{R^2}$) menores em relação ao modelo que considera os efeitos temporais.
+
+e)
+Não nescessáriamente, pois se levarmos em consideração que os modelos estão ambos bem ajustados, não tendo nenhum viés de qualquer tipo, realmente podemos fazer o tipo de comparação, porém um viés nas estimativas de mínimos quadrados podem trazer conclusões totalmente erradas quanto ao problema, uma vez que e estimativa pode estar sobredeterminada no modelo (5) por exemplo, de maneira que o coeficiente estimado é maior em modulo do que o verdadeiro valor do parâmetro estimado.
+
+f)
+
 
 
 2. Implementar um programa em R para reproduzir os resultados da Tabela 8.1 de Stock-Watson
@@ -41,6 +75,8 @@ library(AER)
 dados <- read.dta("fatality.dta")
 dados$mrall <- dados$mrall * 10000
 dados$mlda <- round(dados$mlda,0)
+dados$mlda <- as.factor(dados$mlda)
+dados$mlda <- relevel(dados$mlda,ref= 4)
 ```
 
 
@@ -75,12 +111,37 @@ coef_fit_3[1:2,]
 ```
 
 ```{r}
-ordered(mlda)
-fit_4 <- lm(mrall ~ beertax + as.factor(mlda) + jaild + comserd + vmiles + unrate + log(perinc) + as.factor(state) + as.factor(year),data = dados)
-#summary(fit_4)
+
+fit_4 <- lm(mrall ~ beertax + mlda + jaild + comserd + vmiles + unrate + log(perinc) + as.factor(state) + as.factor(year),data = dados)
+r2_fit4 <-summary(fit_4)$r.squared
+r2_aj_fit4 <- summary(fit_4)$adj.r.squared
 epfit_4robusto <- vcovHC(fit_4, type = "HC1")
 #epfit_4robusto
 #diag(epfit_4robusto)
 coef_fit_4 <- coeftest(fit_4, epfit_4robusto)
 coef_fit_4[1:10,]
 ```
+
+
+```{r}
+
+
+fit_5 <- lm(mrall ~ beertax + as.factor(mlda) + jaild + comserd + vmiles + unrate + log(perinc) + as.factor(state),data = dados)
+r2_fit5 <-summary(fit_5)$r.squared
+r2_aj_fit5 <- summary(fit_5)$adj.r.squared
+epfit_5robusto <- vcovHC(fit_5, type = "HC1")
+#epfit_5robusto
+#diag(epfit_5robusto)
+coef_fit_5 <- coeftest(fit_5, epfit_5robusto)
+coef_fit_5[1:10,]
+
+dados1=dados
+dados1$mlda=as.factor(dados1$mlda)
+dados1=within(dados1,mlda <- relevel(dados1$mlda, ref=4))
+
+dados1$mlda <- relevel(dados1$mlda,ref= 4)
+```
+
+
+
+
