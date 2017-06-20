@@ -1,6 +1,6 @@
 ---
 title: "Lista10"
-author: "Eliane Siqueira"
+author: "Guilherme Pazian e Eliane Siqueira"
 date: "19 de junho de 2017"
 output: pdf_document
 ---
