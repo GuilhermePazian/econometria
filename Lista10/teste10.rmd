@@ -1,6 +1,6 @@
 ---
 title: "Lista10"
-author: "Guilherme Pazian"
+author: "Eliane Siqueira"
 date: "19 de junho de 2017"
 output: pdf_document
 ---
@@ -59,7 +59,7 @@ Sim, os efeitos temporais removem efeitos de variáveis não observáveis que são c
 e)
 Não nescessáriamente, pois se levarmos em consideração que os modelos estão ambos bem ajustados, não tendo nenhum viés de qualquer tipo, realmente podemos fazer o tipo de comparação, porém um viés nas estimativas de mínimos quadrados podem trazer conclusões totalmente erradas quanto ao problema, uma vez que e estimativa pode estar sobredeterminada no modelo (5) por exemplo, de maneira que o coeficiente estimado é maior em modulo do que o verdadeiro valor do parâmetro estimado.
 
-f)
+f) Utiliza-se a mesma estrutura temporal utilizada para a construção da tabela. Porém, adiciona-se duas variáveis: um indicadora relacionada com  0: não pertence ao Oeste, 1: pertence ao Oeste, e a interação entre a taxa de desemprego. A intenção é realizar um teste de hipóteses sobre a iteração. Desta forma, comparamos a mudança na variação da fatalidade entre os grupos de estados não-oeste e estados oeste. Realizar um teste t no coeficiente de interação, utilizando como estimativas o coeficiente estimado e o desvio-padrão do coeficiente estimado.
 
 
 
